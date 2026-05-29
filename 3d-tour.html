@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Virtual Tour — Lumora Estates</title>
+  <meta name="description" content="Experience immersive 3D virtual tours of Lumora Estates' luxury properties. Explore every room in stunning detail from anywhere in the world." />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .tour-viewer {
+      position: relative;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      margin-bottom: 40px;
+    }
+    .tour-viewer-main {
+      position: relative;
+      height: 540px;
+      overflow: hidden;
+    }
+    .tour-viewer-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .tour-controls {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 12px 20px;
+      border-radius: var(--radius-pill);
+    }
+    .tour-ctrl-btn {
+      width: 42px; height: 42px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+    .tour-ctrl-btn:hover { background: var(--accent-blue); border-color: transparent; }
+    .tour-compass {
+      position: absolute;
+      top: 24px; right: 24px;
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      animation: rotate 12s linear infinite;
+    }
+    .tour-info-badge {
+      position: absolute;
+      top: 24px; left: 24px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-md);
+      padding: 14px 20px;
+      color: #fff;
+    }
+    .pano-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      border: 3px solid rgba(14,165,255,0.5);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      background: rgba(14,165,255,0.1);
+      backdrop-filter: blur(10px);
+      cursor: pointer;
+      animation: pulse 2s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .tour-thumbnails {
+      display: flex;
+      gap: 12px;
+      padding: 16px 20px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tour-thumbnails::-webkit-scrollbar { display: none; }
+    .tour-thumb {
+      flex: 0 0 100px;
+      height: 70px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition-fast);
+    }
+    .tour-thumb.active { border-color: var(--accent-blue); }
+    .tour-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .floor-plan-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .floor-plan-visual {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      text-align: center;
+    }
+    .fp-room-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto auto;
+      gap: 3px;
+      max-width: 400px;
+      margin: 24px auto;
+      border: 2px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+    .fp-room {
+      padding: 20px 16px;
+      background: var(--bg-secondary);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      border: 1px solid var(--border-glass);
+      position: relative;
+    }
+    .fp-room:hover, .fp-room.active { background: rgba(14,165,255,0.15); color: var(--accent-blue); border-color: var(--accent-blue); }
+    .fp-room.full-width { grid-column: 1 / -1; }
+    .fp-room .fp-area { display: block; font-size: 0.65rem; color: var(--text-muted); margin-top: 4px; font-weight: 400; }
+    .tour-features { display: flex; flex-direction: column; gap: 16px; }
+    .tour-feature {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      transition: var(--transition);
+    }
+    .tour-feature:hover { border-color: var(--border-glow); transform: translateX(6px); }
+    .tour-feature-icon { font-size: 1.5rem; flex-shrink: 0; }
+    @media(max-width:768px) { .floor-plan-section { grid-template-columns: 1fr; } .tour-viewer-main { height: 320px; } }
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="loader-inner"><div class="loader-logo">LUMORA</div><div class="loader-bar"></div></div></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">LUMORA<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li><li><a href="properties.html">Properties</a></li><li><a href="projects.html">Projects</a></li><li><a href="about.html">About</a></li><li><a href="agents.html">Agents</a></li><li><a href="3d-tour.html" class="active">3D Tour</a></li><li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-theme" id="themeBtn">☀️</button>
+        <a href="contact.html" class="btn-nav-cta">Book Visit</a>
+        <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a><a href="properties.html">Properties</a><a href="projects.html">Projects</a><a href="about.html">About</a><a href="agents.html">Agents</a><a href="3d-tour.html">3D Tour</a><a href="contact.html">Contact</a>
+  </div>
+
+  <!-- Tour Hero -->
+  <div class="tour-hero" style="padding-top:var(--nav-height);">
+    <div class="tour-bg"></div>
+    <div class="tour-overlay"></div>
+    <div class="tour-content">
+      <div class="hero-badge" style="margin:0 auto 20px;">🔭 Immersive 360° Experience</div>
+      <h1 class="page-hero-title" style="text-align:center;font-size:clamp(2.5rem,5vw,4rem);">Virtual <span class="text-gradient">3D Property</span> Tours</h1>
+      <p style="color:var(--text-secondary);text-align:center;max-width:520px;margin:16px auto 28px;font-size:1rem;line-height:1.7;">Explore luxury properties from anywhere in the world. Our cinematic virtual tours give you the full experience before you visit.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <a href="#viewer" class="btn btn-primary" data-scroll-to="#viewer">Start Exploring</a>
+        <a href="contact.html" class="btn btn-secondary">Book Physical Tour</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Property Selector -->
+  <section style="padding:60px 0 20px;">
+    <div class="container">
+      <div class="filter-chips" style="justify-content:center;">
+        <div class="filter-chip active">Azure Sky Villa</div>
+        <div class="filter-chip">Horizon Penthouse</div>
+        <div class="filter-chip">Crystal Heights</div>
+        <div class="filter-chip">Infinity Villa</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tour Viewer -->
+  <section style="padding:20px 0 60px;" id="viewer">
+    <div class="container">
+      <div class="tour-viewer animate-on-scroll">
+        <div class="tour-viewer-main" id="tourViewer">
+          <img id="tourMainImg" src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1400&q=85" alt="Luxury Interior" style="cursor:grab;" />
+          <div class="pano-indicator">⟳</div>
+          <div class="tour-info-badge">
+            <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.6);margin-bottom:4px;">Currently Viewing</div>
+            <div style="font-weight:700;font-size:0.95rem;" id="roomLabel">Master Living Room</div>
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.6);margin-top:2px;">Azure Sky Villa · Dubai</div>
+          </div>
+          <div class="tour-compass">🧭</div>
+          <div class="tour-controls">
+            <div class="tour-ctrl-btn" title="Rotate Left" onclick="rotateTour(-1)">◀</div>
+            <div class="tour-ctrl-btn" title="Zoom In" onclick="zoomTour(1)">🔍</div>
+            <div class="tour-ctrl-btn" title="Fullscreen" onclick="toggleFullscreen()">⛶</div>
+            <div class="tour-ctrl-btn" title="Zoom Out" onclick="zoomTour(-1)">🔎</div>
+            <div class="tour-ctrl-btn" title="Rotate Right" onclick="rotateTour(1)">▶</div>
+          </div>
+        </div>
+        <div class="tour-thumbnails" id="tourThumbs">
+          <div class="tour-thumb active" data-img="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80" data-room="Master Living Room" onclick="switchRoom(this)"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=200&q=80" alt="Living" /></div>
+          <div class="tour-thumb" data-img="https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=800&q=80" data-room="Master Bedroom" onclick="switchRoom(this)"><img src="https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=200&q=80" alt="Bedroom" /></div>
+          <div class="tour-thumb" data-img="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80" data-room="Luxury Kitchen" onclick="switchRoom(this)"><img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&q=80" alt="Kitchen" /></div>
+          <div class="tour-thumb" data-img="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800&q=80" data-room="Master Bathroom" onclick="switchRoom(this)"><img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=200&q=80" alt="Bathroom" /></div>
+          <div class="tour-thumb" data-img="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80" data-room="Infinity Pool & Terrace" onclick="switchRoom(this)"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=200&q=80" alt="Pool" /></div>
+          <div class="tour-thumb" data-img="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80" data-room="Guest Suite" onclick="switchRoom(this)"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=200&q=80" alt="Guest" /></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Room Previews -->
+  <section style="padding:0 0 80px;">
+    <div class="container">
+      <div class="section-header centered animate-on-scroll">
+        <div class="section-label">Virtual Rooms</div>
+        <h2 class="section-title">Explore Every <span class="highlight">Corner</span></h2>
+        <p class="section-desc">Click any room to enter an immersive 360° walkthrough experience.</p>
+      </div>
+      <div class="tour-rooms-grid">
+        <div class="tour-room-card animate-on-scroll" data-room="Master Living Room" onclick="switchToRoom('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1400&q=85','Master Living Room')">
+          <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=700&q=80" alt="Living Room" loading="lazy" />
+          <div class="tour-room-overlay">
+            <h4 style="font-weight:700;font-size:1rem;margin-bottom:4px;color:#fff;">Master Living Room</h4>
+            <p style="font-size:0.78rem;color:rgba(255,255,255,0.7);">3,200 sq ft · South-facing</p>
+          </div>
+          <div class="tour-360-badge">360°</div>
+        </div>
+        <div class="tour-room-card animate-on-scroll" data-room="Master Bedroom" onclick="switchToRoom('https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=1400&q=85','Master Bedroom')">
+          <img src="https://images.unsplash.com/photo-1560185893-a55cbc8c57e8?w=700&q=80" alt="Master Bedroom" loading="lazy" />
+          <div class="tour-room-overlay">
+            <h4 style="font-weight:700;font-size:1rem;margin-bottom:4px;color:#fff;">Master Bedroom Suite</h4>
+            <p style="font-size:0.78rem;color:rgba(255,255,255,0.7);">1,800 sq ft · Walk-in wardrobe</p>
+          </div>
+          <div class="tour-360-badge">360°</div>
+        </div>
+        <div class="tour-room-card animate-on-scroll" data-room="Luxury Kitchen" onclick="switchToRoom('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1400&q=85','Luxury Kitchen')">
+          <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=700&q=80" alt="Kitchen" loading="lazy" />
+          <div class="tour-room-overlay">
+            <h4 style="font-weight:700;font-size:1rem;margin-bottom:4px;color:#fff;">Chef's Kitchen</h4>
+            <p style="font-size:0.78rem;color:rgba(255,255,255,0.7);">900 sq ft · Miele appliances</p>
+          </div>
+          <div class="tour-360-badge">360°</div>
+        </div>
+        <div class="tour-room-card animate-on-scroll" data-room="Infinity Pool" onclick="switchToRoom('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=85','Infinity Pool & Terrace')">
+          <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&q=80" alt="Pool" loading="lazy" />
+          <div class="tour-room-overlay">
+            <h4 style="font-weight:700;font-size:1rem;margin-bottom:4px;color:#fff;">Infinity Pool & Terrace</h4>
+            <p style="font-size:0.78rem;color:rgba(255,255,255,0.7);">4,000 sq ft · Panoramic views</p>
+          </div>
+          <div class="tour-360-badge">360°</div>
+        </div>
+        <div class="tour-room-card animate-on-scroll" data-room="Master Bathroom" onclick="switchToRoom('https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=1400&q=85','Spa Bathroom')">
+          <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=700&q=80" alt="Bathroom" loading="lazy" />
+          <div class="tour-room-overlay">
+            <h4 style="font-weight:700;font-size:1rem;margin-bottom:4px;color:#fff;">Spa-Style Bathroom</h4>
+            <p style="font-size:0.78rem;color:rgba(255,255,255,0.7);">600 sq ft · Rain shower & soaking tub</p>
+          </div>
+          <div class="tour-360-badge">360°</div>
+        </div>
+        <div class="tour-room-card animate-on-scroll" data-room="Home Theater" onclick="switchToRoom('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=85','Home Theater')">
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80" alt="Theater" loading="lazy" />
+          <div class="tour-room-overlay">
+            <h4 style="font-weight:700;font-size:1rem;margin-bottom:4px;color:#fff;">Private Home Theater</h4>
+            <p style="font-size:0.78rem;color:rgba(255,255,255,0.7);">20-seat · Dolby Atmos · 4K</p>
+          </div>
+          <div class="tour-360-badge">360°</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floor Plan -->
+  <section style="padding:0 0 100px;background:var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header centered animate-on-scroll">
+        <div class="section-label">Layout</div>
+        <h2 class="section-title">Interactive <span class="highlight">Floor Plan</span></h2>
+        <p class="section-desc">Click any room on the floor plan to jump directly to its 360° tour.</p>
+      </div>
+      <div class="floor-plan-section animate-on-scroll">
+        <div class="floor-plan-visual">
+          <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:16px;text-transform:uppercase;letter-spacing:1.5px;">Floor 1 — Ground Level</div>
+          <div class="fp-room-grid">
+            <div class="fp-room full-width" onclick="showToast('📍 Entrance Foyer — 450 sq ft')">🚪 Entrance Foyer <span class="fp-area">450 sq ft</span></div>
+            <div class="fp-room" onclick="switchToRoom('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1400&q=85','Master Living Room')">🛋️ Living Room <span class="fp-area">3,200 sq ft</span></div>
+            <div class="fp-room" onclick="switchToRoom('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1400&q=85','Luxury Kitchen')">🍳 Kitchen <span class="fp-area">900 sq ft</span></div>
+            <div class="fp-room" onclick="showToast('📍 Dining Room — 800 sq ft')">🍽️ Dining Room <span class="fp-area">800 sq ft</span></div>
+            <div class="fp-room" onclick="showToast('📍 Study Room — 500 sq ft')">📚 Study Room <span class="fp-area">500 sq ft</span></div>
+            <div class="fp-room full-width" onclick="switchToRoom('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=85','Infinity Pool & Terrace')">🏊 Infinity Pool & Terrace <span class="fp-area">4,000 sq ft</span></div>
+          </div>
+          <div style="font-size:0.72rem;color:var(--text-muted);margin-top:12px;">Click a room to enter the 360° tour</div>
+        </div>
+        <div>
+          <div class="section-label" style="margin-bottom:16px;">Property Details</div>
+          <h3 style="font-family:var(--font-display);font-size:1.5rem;font-weight:800;margin-bottom:12px;">Azure Sky Villa</h3>
+          <p style="color:var(--text-secondary);line-height:1.8;font-size:0.9rem;margin-bottom:28px;">A masterpiece of contemporary architecture set across 8,400 sq ft of meticulously designed living space. Every room tells a story of luxury, with bespoke finishes and world-class craftsmanship throughout.</p>
+          <div class="tour-features">
+            <div class="tour-feature"><div class="tour-feature-icon">📐</div><div><div style="font-weight:700;margin-bottom:4px;">Total Area: 8,400 sq ft</div><div style="font-size:0.82rem;color:var(--text-muted);">Spread across G+3 floors with basement</div></div></div>
+            <div class="tour-feature"><div class="tour-feature-icon">🛏️</div><div><div style="font-weight:700;margin-bottom:4px;">6 Bedrooms, 7 Bathrooms</div><div style="font-size:0.82rem;color:var(--text-muted);">All en-suite with walk-in wardrobes</div></div></div>
+            <div class="tour-feature"><div class="tour-feature-icon">🏊</div><div><div style="font-weight:700;margin-bottom:4px;">Private Infinity Pool</div><div style="font-size:0.82rem;color:var(--text-muted);">50ft heated pool with ocean views</div></div></div>
+            <div class="tour-feature"><div class="tour-feature-icon">🤖</div><div><div style="font-weight:700;margin-bottom:4px;">Full Smart Home System</div><div style="font-size:0.82rem;color:var(--text-muted);">Crestron-powered automation throughout</div></div></div>
+          </div>
+          <div style="margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;">
+            <a href="contact.html" class="btn btn-primary">Schedule Physical Visit</a>
+            <a href="contact.html" class="btn btn-secondary">Download Brochure</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><span class="nav-logo">LUMORA<span>.</span></span><p>India's most trusted luxury real estate brand.</p><div class="footer-socials"><div class="footer-social-btn">𝕏</div><div class="footer-social-btn">in</div><div class="footer-social-btn">📷</div></div></div>
+        <div><div class="footer-heading">Quick Links</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="properties.html">Properties</a></li><li><a href="3d-tour.html">3D Tour</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div><div class="footer-heading">Tour Features</div><ul class="footer-links"><li><a href="3d-tour.html">360° Views</a></li><li><a href="3d-tour.html">Floor Plans</a></li><li><a href="3d-tour.html">Virtual Walk</a></li><li><a href="contact.html">Book Physical Tour</a></li></ul></div>
+        <div><div class="footer-heading">Contact</div><div class="footer-contact-item">📍 Lumora Tower, BKC, Mumbai</div><div class="footer-contact-item">📞 +91 98765 43210</div><div class="footer-contact-item">✉️ hello@lumoraestates.com</div></div>
+      </div>
+      <div class="footer-bottom"><div class="footer-bottom-text">© 2025 Lumora Estates. All rights reserved.</div></div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/919876543210" class="whatsapp-btn" target="_blank">💬</a>
+  <div class="float-book-btn" onclick="window.location.href='contact.html'"><span>📅</span> Book a Visit</div>
+  <div class="chatbot-float"><div class="chatbot-window" id="chatbotWindow"><div class="chatbot-header"><div class="chatbot-avatar">🤖</div><div><div style="font-weight:700;font-size:0.9rem;color:#fff;">Lumora AI</div></div><div style="margin-left:auto;cursor:pointer;color:#fff;" onclick="document.getElementById('chatbotWindow').classList.remove('open')">✕</div></div><div class="chatbot-messages" id="chatMessages"><div class="chat-msg bot">👋 Enjoying the 3D tour? Ask me about any property!</div></div><div class="chatbot-input-row"><input type="text" id="chatInput" placeholder="Ask me anything..." /><button id="chatSend" class="btn btn-primary btn-sm">→</button></div></div><div class="chatbot-btn" id="chatbotBtn">🤖</div></div>
+
+  <script src="script.js"></script>
+  <script>
+    let currentZoom = 1;
+    let currentRotation = 0;
+    const tourImg = document.getElementById('tourMainImg');
+    const roomLabel = document.getElementById('roomLabel');
+
+    function switchRoom(el) {
+      document.querySelectorAll('.tour-thumb').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      const img = el.dataset.img;
+      const room = el.dataset.room;
+      if (tourImg) { tourImg.style.opacity = '0'; setTimeout(() => { tourImg.src = img; tourImg.style.opacity = '1'; }, 300); tourImg.style.transition = 'opacity 0.3s ease'; }
+      if (roomLabel) roomLabel.textContent = room;
+      currentZoom = 1; currentRotation = 0;
+      if (tourImg) tourImg.style.transform = '';
+    }
+
+    function switchToRoom(imgSrc, roomName) {
+      if (tourImg) { tourImg.style.opacity = '0'; setTimeout(() => { tourImg.src = imgSrc; tourImg.style.opacity = '1'; }, 300); }
+      if (roomLabel) roomLabel.textContent = roomName;
+      document.querySelector('#viewer')?.scrollIntoView({ behavior: 'smooth' });
+      showToast('🔄 Loading 360° tour of ' + roomName + '...');
+    }
+
+    function rotateTour(dir) {
+      currentRotation += dir * 30;
+      if (tourImg) tourImg.style.transform = `scale(${currentZoom}) rotate(${currentRotation}deg)`;
+    }
+
+    function zoomTour(dir) {
+      currentZoom = Math.max(1, Math.min(2.5, currentZoom + dir * 0.2));
+      if (tourImg) tourImg.style.transform = `scale(${currentZoom}) rotate(${currentRotation}deg)`;
+    }
+
+    function toggleFullscreen() {
+      const viewer = document.getElementById('tourViewer');
+      if (!document.fullscreenElement) { viewer?.requestFullscreen(); }
+      else { document.exitFullscreen(); }
+    }
+
+    // Drag to pan
+    let isDragging = false, startX, startY;
+    if (tourImg) {
+      tourImg.addEventListener('mousedown', (e) => { isDragging = true; startX = e.clientX; startY = e.clientY; tourImg.style.cursor = 'grabbing'; });
+      document.addEventListener('mouseup', () => { isDragging = false; tourImg.style.cursor = 'grab'; });
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = (e.clientX - startX) * 0.3;
+        const dy = (e.clientY - startY) * 0.3;
+        tourImg.style.objectPosition = `${50 + dx}% ${50 + dy}%`;
+      });
+    }
+
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        showToast('Loading tour: ' + chip.textContent);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Properties — Lumora Estates</title>
+  <meta name="description" content="Explore our portfolio of luxury villas, penthouses, apartments, and commercial spaces across the world's most prestigious addresses." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="loader"><div class="loader-inner"><div class="loader-logo">LUMORA</div><div class="loader-bar"></div></div></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">LUMORA<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="properties.html" class="active">Properties</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="agents.html">Agents</a></li>
+        <li><a href="3d-tour.html">3D Tour</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-theme" id="themeBtn">☀️</button>
+        <a href="contact.html" class="btn-nav-cta">Book Visit</a>
+        <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a><a href="properties.html">Properties</a><a href="projects.html">Projects</a>
+    <a href="about.html">About</a><a href="agents.html">Agents</a><a href="3d-tour.html">3D Tour</a><a href="contact.html">Contact</a>
+  </div>
+
+  <!-- Page Hero -->
+  <div class="page-hero">
+    <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=80');"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Properties</span></div>
+      <h1 class="page-hero-title">Our <span class="text-gradient">Premium</span> Properties</h1>
+      <p style="color:var(--text-secondary);max-width:500px;margin-top:12px;font-size:1rem;line-height:1.7;">Explore our curated portfolio of luxury residences — each one a masterpiece of design, crafted for the extraordinary.</p>
+    </div>
+  </div>
+
+  <!-- Search & Filters -->
+  <section style="padding:60px 0 0;">
+    <div class="container">
+      <div class="search-section animate-on-scroll">
+        <div class="search-row">
+          <div class="search-field">
+            <label>Search Properties</label>
+            <input type="text" id="propertySearch" placeholder="Location, name, type..." />
+          </div>
+          <div class="search-field">
+            <label>Property Type</label>
+            <select>
+              <option>All Types</option>
+              <option>Villa</option>
+              <option>Penthouse</option>
+              <option>Apartment</option>
+              <option>Townhouse</option>
+              <option>Commercial</option>
+            </select>
+          </div>
+          <div class="search-field">
+            <label>Price Range</label>
+            <select>
+              <option>Any Price</option>
+              <option>Under $1M</option>
+              <option>$1M–$5M</option>
+              <option>$5M–$15M</option>
+              <option>Above $15M</option>
+            </select>
+          </div>
+          <div>
+            <label class="footer-heading" style="display:block;margin-bottom:8px;">Sort By</label>
+            <select id="sortSelect" style="background:var(--bg-secondary);border:1px solid var(--border-glass);border-radius:var(--radius-sm);padding:12px 16px;color:var(--text-primary);font-size:0.9rem;">
+              <option value="default">Default</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="filter-chips" style="margin-top:20px;">
+          <div class="filter-chip active" data-filter="all">All Properties</div>
+          <div class="filter-chip" data-filter="villa">Villas</div>
+          <div class="filter-chip" data-filter="penthouse">Penthouses</div>
+          <div class="filter-chip" data-filter="apartment">Apartments</div>
+          <div class="filter-chip" data-filter="townhouse">Townhouses</div>
+          <div class="filter-chip" data-filter="commercial">Commercial</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Properties Grid -->
+  <section style="padding:40px 0 100px;">
+    <div class="container">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;">
+        <p style="color:var(--text-secondary);font-size:0.9rem;">Showing <strong style="color:var(--text-primary);">24</strong> properties</p>
+        <div class="d-flex gap-8 align-center">
+          <span style="font-size:0.82rem;color:var(--text-muted);">View:</span>
+          <button class="btn btn-sm btn-secondary" style="padding:8px 14px;">▦</button>
+          <button class="btn btn-sm btn-secondary" style="padding:8px 14px;">☰</button>
+        </div>
+      </div>
+
+      <div class="properties-grid" id="propertiesGrid">
+        <!-- Villa 1 -->
+        <div class="property-card animate-on-scroll" data-type="villa" data-price="4800000">
+          <div class="property-card-image">
+            <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=700&q=80" alt="Azure Sky Villa" loading="lazy" />
+            <span class="property-badge badge-featured">Featured</span>
+            <button class="wishlist-btn">🤍</button>
+          </div>
+          <div class="property-card-body">
+            <div class="property-type">Villa</div>
+            <div class="property-name">Azure Sky Villa</div>
+            <div class="property-location">📍 Palm Jumeirah, Dubai</div>
+            <div class="property-specs">
+              <div class="spec-item"><span class="spec-icon">🛏️</span> 6 Beds</div>
+              <div class="spec-item"><span class="spec-icon">🚿</span> 7 Baths</div>
+              <div class="spec-item"><span class="spec-icon">📐</span> 8,400 sqft</div>
+            </div>
+            <div class="property-card-footer">
+              <div class="property-price">$4,800,000</div>
+              <a href="contact.html" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Penthouse 1 -->
+        <div class="property-card animate-on-scroll" data-type="penthouse" data-price="12500000">
+          <div class="property-card-image">
+            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=700&q=80" alt="Horizon Sky Penthouse" loading="lazy" />
+            <span class="property-badge badge-new">New</span>
+            <button class="wishlist-btn">🤍</button>
+          </div>
+          <div class="property-card-body">
+            <div class="property-type">Penthouse</div>
+            <div class="property-name">Horizon Sky Penthouse</div>
+            <div class="property-location">📍 Marina Bay, Singapore</div>
+            <div class="property-specs">
+              <div class="spec-item"><span class="spec-icon">🛏️</span> 5 Beds</div>
+              <div class="spec-item"><span class="spec-icon">🚿</span> 6 Baths</div>
+              <div class="spec-item"><span class="spec-icon">📐</span> 12,000 sqft</div>
+            </div>
+            <div class="property-card-footer">
+              <div class="property-price">$12,500,000</div>
+              <a href="contact.html" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Apartment 1 -->
+        <div class="property-card animate-on-scroll" data-type="apartment" data-price="1800000">
+          <div class="property-card-image">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=700&q=80" alt="Crystal Heights" loading="lazy" />
+            <span class="property-badge badge-new">New</span>
+            <button class="wishlist-btn">🤍</button>
+          </div>
+          <div class="property-card-body">
+            <div class="property-type">Apartment</div>
+            <div class="property-name">Crystal Heights Apartment</div>
+            <div class="property-location">📍 Central Park, New York</div>
+            <div class="property-specs">
+              <div class="spec-item"><span class="spec-icon">🛏️</span> 4 Beds</div>
+              <div class="spec-item"><span class="spec-icon">🚿</span> 4 Baths</div>
+              <div class="spec-item"><span class="spec-icon">📐</span> 5,200 sqft</div>
+            </div>
+            <div class="property-card-footer">
+              <div class="property-price">$1,800,000</div>
+              <a href="contact.html" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Villa 2 -->
+        <div class="property-card animate-on-scroll" data-type="villa" data-price="7200000">
+          <div class="property-card-image">
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&q=80" alt="Infinity Crest Villa" loading="lazy" />
+            <span class="property-badge badge-featured">Featured</span>
+            <button class="wishlist-btn">🤍</button>
+          </div>
+          <div class="property-card-body">
+            <div class="property-type">Villa</div>
+            <div class="property-name">Infinity Crest Villa</div>
+            <div class="property-location">📍 Bel Air, Los Angeles</div>
+            <div class="property-specs">
+              <div class="spec-item"><span class="spec-icon">🛏️</span> 7 Beds</div>
+              <div class="spec-item"><span class="spec-icon">🚿</span> 9 Baths</div>
+              <div class="spec-item"><span class="spec-icon">📐</span> 11,500 sqft</div>
+            </div>
+            <div class="property-card-footer">
+              <div class="property-price">$7,200,000</div>
+              <a href="contact.html" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Townhouse 1 -->
+        <div class="property-card animate-on-scroll" data-type="townhouse" data-price="2400000">
+          <div class="property-card-image">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&q=80" alt="Royal Townhouse" loading="lazy" />
+            <span class="property-badge badge-new">New Launch</span>
+            <button class="wishlist-btn">🤍</button>
+          </div>
+          <div class="property-card-body">
+            <div class="property-type">Townhouse</div>
+            <div class="property-name">Royal Grand Townhouse</div>
+            <div class="property-location">📍 Knightsbridge, London</div>
+            <div class="property-specs">
+              <div class="spec-item"><span class="spec-icon">🛏️</span> 5 Beds</div>
+              <div class="spec-item"><span class="spec-icon">🚿</span> 5 Baths</div>
+              <div class="spec-item"><span class="spec-icon">📐</span> 6,800 sqft</div>
+            </div>
+            <div class="property-card-footer">
+              <div class="property-price">$2,400,000</div>
+              <a href="contact.html" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Commercial 1 -->
+        <div class="property-card animate-on-scroll" data-type="commercial" data-price="9500000">
+          <div class="property-card-image">
+            <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=700&q=80" alt="Lumora Business Tower" loading="lazy" />
+            <span class="property-badge badge-upcoming">Commercial</span>
+            <button class="wishlist-btn">🤍</button>
+          </div>
+          <div class="property-card-body">
+            <div class="property-type">Commercial</div>
+            <div class="property-name">Lumora Business Tower</div>
+            <div class="property-location">📍 DIFC, Dubai</div>
+            <div class="property-specs">
+              <div class="spec-item"><span class="spec-icon">🏢</span> 40 Floors</div>
+              <div class="spec-item"><span class="spec-icon">📐</span> 180,000 sqft</div>
+              <div class="spec-item"><span class="spec-icon">🚗</span> 500 Parking</div>
+            </div>
+            <div class="property-card-footer">
+              <div class="property-price">$9,500,000</div>
+              <a href="contact.html" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Penthouse 2 -->
+        <div class="property-card animate-on-scroll" data-type="penthouse" data-price="18000000">
+          <div class="property-card-image">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80" alt="Ultra Penthouse" loading="lazy" />
+            <span class="property-badge badge-featured">Ultra Luxury</span>
+            <button class="wishlist-btn">🤍</button>
+          </div>
+          <div class="property-card-body">
+            <div class="property-type">Penthouse</div>
+            <div class="property-name">Ultra Sky Residence</div>
+            <div class="property-location">📍 Burj Khalifa, Dubai</div>
+            <div class="property-specs">
+              <div class="spec-item"><span class="spec-icon">🛏️</span> 6 Beds</div>
+              <div class="spec-item"><span class="spec-icon">🚿</span> 8 Baths</div>
+              <div class="spec-item"><span class="spec-icon">📐</span> 18,000 sqft</div>
+            </div>
+            <div class="property-card-footer">
+              <div class="property-price">$18,000,000</div>
+              <a href="contact.html" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Apartment 2 -->
+        <div class="property-card animate-on-scroll" data-type="apartment" data-price="3200000">
+          <div class="property-card-image">
+            <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=700&q=80" alt="Serene Residence" loading="lazy" />
+            <button class="wishlist-btn">🤍</button>
+          </div>
+          <div class="property-card-body">
+            <div class="property-type">Apartment</div>
+            <div class="property-name">Serene Sky Residence</div>
+            <div class="property-location">📍 Côte d'Azur, Monaco</div>
+            <div class="property-specs">
+              <div class="spec-item"><span class="spec-icon">🛏️</span> 4 Beds</div>
+              <div class="spec-item"><span class="spec-icon">🚿</span> 5 Baths</div>
+              <div class="spec-item"><span class="spec-icon">📐</span> 7,200 sqft</div>
+            </div>
+            <div class="property-card-footer">
+              <div class="property-price">$3,200,000</div>
+              <a href="contact.html" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Villa 3 -->
+        <div class="property-card animate-on-scroll" data-type="villa" data-price="5600000">
+          <div class="property-card-image">
+            <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=700&q=80" alt="Ocean Front Villa" loading="lazy" />
+            <span class="property-badge badge-new">New</span>
+            <button class="wishlist-btn">🤍</button>
+          </div>
+          <div class="property-card-body">
+            <div class="property-type">Villa</div>
+            <div class="property-name">Oceanfront Dream Villa</div>
+            <div class="property-location">📍 Malibu, California</div>
+            <div class="property-specs">
+              <div class="spec-item"><span class="spec-icon">🛏️</span> 6 Beds</div>
+              <div class="spec-item"><span class="spec-icon">🚿</span> 7 Baths</div>
+              <div class="spec-item"><span class="spec-icon">📐</span> 9,800 sqft</div>
+            </div>
+            <div class="property-card-footer">
+              <div class="property-price">$5,600,000</div>
+              <a href="contact.html" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Load More -->
+      <div style="text-align:center;margin-top:60px;">
+        <button class="btn btn-secondary btn-lg" onclick="showToast('Loading more properties...')">Load More Properties</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mortgage Calculator -->
+  <section style="padding:0 0 100px;background:var(--bg-secondary);">
+    <div class="container">
+      <div style="max-width:700px;margin:0 auto;">
+        <div class="section-header centered animate-on-scroll">
+          <div class="section-label">Financial Planning</div>
+          <h2 class="section-title">Mortgage <span class="highlight">Calculator</span></h2>
+        </div>
+        <div class="calculator animate-on-scroll" id="mortgageCalc">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Property Price ($)</label>
+              <input type="number" id="calcPrice" value="2000000" min="0" step="50000" />
+            </div>
+            <div class="form-group">
+              <label>Down Payment (%)</label>
+              <input type="number" id="calcDown" value="20" min="0" max="100" step="5" />
+              <input class="range-input" type="range" id="calcDownRange" value="20" min="0" max="80" step="5" oninput="document.getElementById('calcDown').value=this.value;document.getElementById('mortgageCalc').dispatchEvent(new Event('input',{bubbles:true}))" />
+            </div>
+            <div class="form-group">
+              <label>Interest Rate (% p.a.)</label>
+              <input type="number" id="calcRate" value="4.5" min="0" max="20" step="0.1" />
+            </div>
+            <div class="form-group">
+              <label>Loan Duration</label>
+              <select id="calcYears">
+                <option value="10">10 Years</option>
+                <option value="15">15 Years</option>
+                <option value="20">20 Years</option>
+                <option value="25">25 Years</option>
+                <option value="30" selected>30 Years</option>
+              </select>
+            </div>
+          </div>
+          <div class="calc-result">
+            <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:1.5px;">Monthly EMI</div>
+            <div class="calc-monthly" id="calcMonthly">$0</div>
+            <div style="margin-top:16px;display:flex;justify-content:center;gap:32px;">
+              <div>
+                <div style="font-size:0.75rem;color:var(--text-muted);">Total Payment</div>
+                <div style="font-weight:700;font-size:1rem;" id="calcTotal">$0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="nav-logo">LUMORA<span>.</span></span>
+          <p>India's most trusted luxury real estate brand, crafting extraordinary living experiences for over 18 years.</p>
+          <div class="footer-socials">
+            <div class="footer-social-btn">𝕏</div><div class="footer-social-btn">in</div><div class="footer-social-btn">📷</div><div class="footer-social-btn">▶</div>
+          </div>
+        </div>
+        <div><div class="footer-heading">Quick Links</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="properties.html">Properties</a></li><li><a href="projects.html">Projects</a></li><li><a href="about.html">About</a></li></ul></div>
+        <div><div class="footer-heading">Property Types</div><ul class="footer-links"><li><a href="properties.html">Villas</a></li><li><a href="properties.html">Penthouses</a></li><li><a href="properties.html">Apartments</a></li><li><a href="properties.html">Commercial</a></li></ul></div>
+        <div><div class="footer-heading">Contact</div><div class="footer-contact-item">📍 Lumora Tower, BKC, Mumbai</div><div class="footer-contact-item">📞 +91 98765 43210</div><div class="footer-contact-item">✉️ hello@lumoraestates.com</div></div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-bottom-text">© 2025 Lumora Estates. All rights reserved.</div>
+        <div class="footer-bottom-text">Privacy · Terms · Cookies</div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/919876543210" class="whatsapp-btn" target="_blank">💬</a>
+  <div class="float-book-btn" onclick="window.location.href='contact.html'"><span>📅</span> Book a Visit</div>
+  <div class="chatbot-float">
+    <div class="chatbot-window" id="chatbotWindow"><div class="chatbot-header"><div class="chatbot-avatar">🤖</div><div><div style="font-weight:700;font-size:0.9rem;color:#fff;">Lumora AI</div><div style="font-size:0.72rem;color:rgba(255,255,255,0.8);">Online</div></div><div style="margin-left:auto;cursor:pointer;color:#fff;" onclick="document.getElementById('chatbotWindow').classList.remove('open')">✕</div></div><div class="chatbot-messages" id="chatMessages"><div class="chat-msg bot">👋 Hi! Looking for a property? I can help!</div></div><div class="chatbot-input-row"><input type="text" id="chatInput" placeholder="Ask me anything..." /><button id="chatSend" class="btn btn-primary btn-sm">→</button></div></div>
+    <div class="chatbot-btn" id="chatbotBtn">🤖</div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    function showToast(msg) {
+      let toast = document.getElementById('lm-toast');
+      if (!toast) { toast = document.createElement('div'); toast.id = 'lm-toast'; toast.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg-glass-strong);backdrop-filter:blur(20px);border:1px solid var(--border-glass);border-radius:var(--radius-pill);padding:12px 24px;font-size:0.85rem;color:var(--text-primary);z-index:9000;opacity:0;transition:all 0.3s ease;white-space:nowrap;pointer-events:none;'; document.body.appendChild(toast); }
+      toast.textContent = msg; toast.style.opacity = '1'; toast.style.transform = 'translateX(-50%) translateY(0)';
+      clearTimeout(toast._timer); toast._timer = setTimeout(() => { toast.style.opacity='0'; toast.style.transform='translateX(-50%) translateY(20px)'; }, 2500);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Agents — Lumora Estates</title>
+  <meta name="description" content="Meet Lumora Estates' world-class real estate agents — specialists in luxury properties with decades of combined experience." />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .agent-detail-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-xl);
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 40px;
+      align-items: start;
+      transition: var(--transition);
+      margin-bottom: 24px;
+    }
+    .agent-detail-card:hover { border-color: var(--border-glow); box-shadow: var(--shadow-glow); }
+    .agent-detail-card img { width: 220px; height: 280px; object-fit: cover; object-position: top; border-radius: var(--radius-lg); }
+    .agent-skills { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+    .agent-skill { padding: 5px 14px; background: rgba(14,165,255,0.1); border: 1px solid rgba(14,165,255,0.2); border-radius: var(--radius-pill); font-size: 0.75rem; color: var(--accent-blue); }
+    .agent-contact-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+    @media(max-width:768px) { .agent-detail-card { grid-template-columns: 1fr; } .agent-detail-card img { width: 100%; height: 260px; } }
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="loader-inner"><div class="loader-logo">LUMORA</div><div class="loader-bar"></div></div></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">LUMORA<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li><li><a href="properties.html">Properties</a></li><li><a href="projects.html">Projects</a></li><li><a href="about.html">About</a></li><li><a href="agents.html" class="active">Agents</a></li><li><a href="3d-tour.html">3D Tour</a></li><li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-theme" id="themeBtn">☀️</button>
+        <a href="contact.html" class="btn-nav-cta">Book Visit</a>
+        <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a><a href="properties.html">Properties</a><a href="projects.html">Projects</a><a href="about.html">About</a><a href="agents.html">Agents</a><a href="3d-tour.html">3D Tour</a><a href="contact.html">Contact</a>
+  </div>
+
+  <!-- Page Hero -->
+  <div class="page-hero">
+    <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=1920&q=80');"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Our Agents</span></div>
+      <h1 class="page-hero-title">Our <span class="text-gradient">Expert</span> Agents</h1>
+      <p style="color:var(--text-secondary);max-width:500px;margin-top:12px;line-height:1.7;">World-class real estate specialists dedicated to making your luxury property journey seamless, personal, and extraordinary.</p>
+    </div>
+  </div>
+
+  <!-- Search Agents -->
+  <section style="padding:60px 0 20px;">
+    <div class="container">
+      <div class="search-section animate-on-scroll">
+        <div class="search-row">
+          <div class="search-field">
+            <label>Search by Name</label>
+            <input type="text" placeholder="Agent name..." id="agentSearch" />
+          </div>
+          <div class="search-field">
+            <label>Specialization</label>
+            <select id="agentFilter">
+              <option value="all">All Specializations</option>
+              <option value="villa">Luxury Villas</option>
+              <option value="penthouse">Penthouses</option>
+              <option value="commercial">Commercial</option>
+              <option value="international">International</option>
+            </select>
+          </div>
+          <div class="search-field">
+            <label>City</label>
+            <select>
+              <option>All Cities</option>
+              <option>Mumbai</option>
+              <option>Delhi</option>
+              <option>Bangalore</option>
+              <option>Dubai</option>
+              <option>Singapore</option>
+            </select>
+          </div>
+          <button class="btn btn-primary">Search</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agent Cards Grid -->
+  <section style="padding:40px 0 80px;">
+    <div class="container">
+      <div class="section-header centered animate-on-scroll" style="margin-bottom:48px;">
+        <div class="section-label">Meet the Team</div>
+        <h2 class="section-title">Our <span class="highlight">Finest</span> Agents</h2>
+      </div>
+      <div class="agents-grid" id="agentsGrid">
+        <!-- Agent 1 -->
+        <div class="agent-card animate-on-scroll" data-spec="villa">
+          <div class="agent-photo-wrap">
+            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&q=80" alt="Rohan Malhotra" />
+            <div class="agent-photo-overlay">
+              <div class="agent-social-btn">𝕏</div>
+              <div class="agent-social-btn">in</div>
+              <div class="agent-social-btn">📷</div>
+            </div>
+          </div>
+          <div class="agent-info">
+            <div class="agent-specialty">Luxury Villas</div>
+            <div class="agent-name">Rohan Malhotra</div>
+            <div class="agent-exp">12 Years Experience · Mumbai</div>
+            <div class="star-rating">★★★★★</div>
+            <div class="agent-stats">
+              <div><span class="agent-stat-num">₹480Cr</span><span class="agent-stat-lbl">Deals Closed</span></div>
+              <div><span class="agent-stat-num">148</span><span class="agent-stat-lbl">Properties</span></div>
+            </div>
+            <a href="contact.html" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:16px;">Contact Agent</a>
+          </div>
+        </div>
+
+        <!-- Agent 2 -->
+        <div class="agent-card animate-on-scroll" data-spec="penthouse">
+          <div class="agent-photo-wrap">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500&q=80" alt="Priya Kapoor" />
+            <div class="agent-photo-overlay">
+              <div class="agent-social-btn">𝕏</div>
+              <div class="agent-social-btn">in</div>
+              <div class="agent-social-btn">📷</div>
+            </div>
+          </div>
+          <div class="agent-info">
+            <div class="agent-specialty">Penthouses & High-Rise</div>
+            <div class="agent-name">Priya Kapoor</div>
+            <div class="agent-exp">10 Years Experience · Delhi</div>
+            <div class="star-rating">★★★★★</div>
+            <div class="agent-stats">
+              <div><span class="agent-stat-num">₹620Cr</span><span class="agent-stat-lbl">Deals Closed</span></div>
+              <div><span class="agent-stat-num">192</span><span class="agent-stat-lbl">Properties</span></div>
+            </div>
+            <a href="contact.html" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:16px;">Contact Agent</a>
+          </div>
+        </div>
+
+        <!-- Agent 3 -->
+        <div class="agent-card animate-on-scroll" data-spec="international">
+          <div class="agent-photo-wrap">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=500&q=80" alt="Vikram Suri" />
+            <div class="agent-photo-overlay">
+              <div class="agent-social-btn">𝕏</div>
+              <div class="agent-social-btn">in</div>
+              <div class="agent-social-btn">📷</div>
+            </div>
+          </div>
+          <div class="agent-info">
+            <div class="agent-specialty">International Properties</div>
+            <div class="agent-name">Vikram Suri</div>
+            <div class="agent-exp">15 Years Experience · Dubai</div>
+            <div class="star-rating">★★★★★</div>
+            <div class="agent-stats">
+              <div><span class="agent-stat-num">$280M</span><span class="agent-stat-lbl">Deals Closed</span></div>
+              <div><span class="agent-stat-num">215</span><span class="agent-stat-lbl">Properties</span></div>
+            </div>
+            <a href="contact.html" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:16px;">Contact Agent</a>
+          </div>
+        </div>
+
+        <!-- Agent 4 -->
+        <div class="agent-card animate-on-scroll" data-spec="commercial">
+          <div class="agent-photo-wrap">
+            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&q=80" alt="Ananya Sharma" />
+            <div class="agent-photo-overlay">
+              <div class="agent-social-btn">𝕏</div>
+              <div class="agent-social-btn">in</div>
+              <div class="agent-social-btn">📷</div>
+            </div>
+          </div>
+          <div class="agent-info">
+            <div class="agent-specialty">Commercial Spaces</div>
+            <div class="agent-name">Ananya Sharma</div>
+            <div class="agent-exp">8 Years Experience · Bangalore</div>
+            <div class="star-rating">★★★★★</div>
+            <div class="agent-stats">
+              <div><span class="agent-stat-num">₹380Cr</span><span class="agent-stat-lbl">Deals Closed</span></div>
+              <div><span class="agent-stat-num">124</span><span class="agent-stat-lbl">Properties</span></div>
+            </div>
+            <a href="contact.html" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:16px;">Contact Agent</a>
+          </div>
+        </div>
+
+        <!-- Agent 5 -->
+        <div class="agent-card animate-on-scroll" data-spec="villa">
+          <div class="agent-photo-wrap">
+            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&q=80" alt="Arjun Mehta" />
+            <div class="agent-photo-overlay">
+              <div class="agent-social-btn">𝕏</div>
+              <div class="agent-social-btn">in</div>
+              <div class="agent-social-btn">📷</div>
+            </div>
+          </div>
+          <div class="agent-info">
+            <div class="agent-specialty">Luxury Villas & Estates</div>
+            <div class="agent-name">Arjun Mehta</div>
+            <div class="agent-exp">11 Years Experience · Mumbai</div>
+            <div class="star-rating">★★★★★</div>
+            <div class="agent-stats">
+              <div><span class="agent-stat-num">₹520Cr</span><span class="agent-stat-lbl">Deals Closed</span></div>
+              <div><span class="agent-stat-num">178</span><span class="agent-stat-lbl">Properties</span></div>
+            </div>
+            <a href="contact.html" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:16px;">Contact Agent</a>
+          </div>
+        </div>
+
+        <!-- Agent 6 -->
+        <div class="agent-card animate-on-scroll" data-spec="international">
+          <div class="agent-photo-wrap">
+            <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=500&q=80" alt="Kavya Nair" />
+            <div class="agent-photo-overlay">
+              <div class="agent-social-btn">𝕏</div>
+              <div class="agent-social-btn">in</div>
+              <div class="agent-social-btn">📷</div>
+            </div>
+          </div>
+          <div class="agent-info">
+            <div class="agent-specialty">International & Investments</div>
+            <div class="agent-name">Kavya Nair</div>
+            <div class="agent-exp">9 Years Experience · Singapore</div>
+            <div class="star-rating">★★★★★</div>
+            <div class="agent-stats">
+              <div><span class="agent-stat-num">$190M</span><span class="agent-stat-lbl">Deals Closed</span></div>
+              <div><span class="agent-stat-num">156</span><span class="agent-stat-lbl">Properties</span></div>
+            </div>
+            <a href="contact.html" class="btn btn-primary btn-sm" style="width:100%;justify-content:center;margin-top:16px;">Contact Agent</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Agent Spotlight -->
+  <section style="padding:0 0 100px;background:var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header centered animate-on-scroll">
+        <div class="section-label">Agent Spotlight</div>
+        <h2 class="section-title">Agent of the <span class="highlight-gold">Month</span></h2>
+      </div>
+      <div class="agent-detail-card animate-on-scroll">
+        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=85" alt="Rohan Malhotra" />
+        <div>
+          <div class="agent-specialty" style="font-size:0.8rem;margin-bottom:8px;">⭐ Agent of the Month — June 2025</div>
+          <h3 style="font-family:var(--font-display);font-size:1.8rem;font-weight:800;margin-bottom:4px;">Rohan Malhotra</h3>
+          <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:16px;">Senior Luxury Property Specialist · Mumbai · 12 Years Experience</p>
+          <div class="star-rating" style="font-size:1rem;margin-bottom:16px;">★★★★★ <span style="color:var(--text-muted);font-size:0.8rem;margin-left:8px;">5.0 (128 reviews)</span></div>
+          <p style="color:var(--text-secondary);line-height:1.8;font-size:0.92rem;margin-bottom:20px;">"I don't just sell properties — I help families find their sanctuary. With 12 years in Mumbai's luxury market, I bring deep market knowledge, transparent guidance, and unwavering dedication to every client. Your dream home is my mission."</p>
+          <div class="agent-skills">
+            <span class="agent-skill">Luxury Villas</span>
+            <span class="agent-skill">Bandra Kurla Complex</span>
+            <span class="agent-skill">South Mumbai</span>
+            <span class="agent-skill">Investment Advisory</span>
+            <span class="agent-skill">NRI Services</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:20px;background:var(--bg-secondary);border-radius:var(--radius-md);margin-bottom:20px;">
+            <div style="text-align:center;"><div style="font-size:1.4rem;font-weight:800;" class="text-gradient">148</div><div style="font-size:0.75rem;color:var(--text-muted);">Properties</div></div>
+            <div style="text-align:center;"><div style="font-size:1.4rem;font-weight:800;" class="text-gradient">₹480Cr</div><div style="font-size:0.75rem;color:var(--text-muted);">Sales Value</div></div>
+            <div style="text-align:center;"><div style="font-size:1.4rem;font-weight:800;" class="text-gradient">98%</div><div style="font-size:0.75rem;color:var(--text-muted);">Client Satisfaction</div></div>
+            <div style="text-align:center;"><div style="font-size:1.4rem;font-weight:800;" class="text-gradient">12</div><div style="font-size:0.75rem;color:var(--text-muted);">Years Exp.</div></div>
+          </div>
+          <div class="agent-contact-row">
+            <a href="contact.html" class="btn btn-primary">📞 Contact Now</a>
+            <a href="contact.html" class="btn btn-secondary">📅 Book Meeting</a>
+            <a href="https://wa.me/919876543210" class="btn btn-secondary" target="_blank">💬 WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Join Our Team -->
+  <section style="padding:100px 0;">
+    <div class="container">
+      <div class="newsletter-section animate-on-scroll" style="background:var(--grad-primary);">
+        <div style="position:relative;z-index:1;text-align:center;">
+          <div style="font-size:2.5rem;margin-bottom:16px;">🌟</div>
+          <h2 style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:#fff;margin-bottom:12px;">Join the Lumora Team</h2>
+          <p style="color:rgba(255,255,255,0.85);max-width:500px;margin:0 auto 28px;line-height:1.7;">Are you a passionate real estate professional? Join India's most prestigious luxury property brand and take your career to extraordinary heights.</p>
+          <a href="contact.html" class="btn btn-gold btn-lg">Apply to Join</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><span class="nav-logo">LUMORA<span>.</span></span><p>India's most trusted luxury real estate brand.</p><div class="footer-socials"><div class="footer-social-btn">𝕏</div><div class="footer-social-btn">in</div><div class="footer-social-btn">📷</div></div></div>
+        <div><div class="footer-heading">Quick Links</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="properties.html">Properties</a></li><li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div><div class="footer-heading">Services</div><ul class="footer-links"><li><a href="properties.html">Buy Property</a></li><li><a href="properties.html">Sell Property</a></li><li><a href="contact.html">Investment Advisory</a></li><li><a href="contact.html">NRI Services</a></li></ul></div>
+        <div><div class="footer-heading">Contact</div><div class="footer-contact-item">📍 Lumora Tower, BKC, Mumbai</div><div class="footer-contact-item">📞 +91 98765 43210</div><div class="footer-contact-item">✉️ hello@lumoraestates.com</div></div>
+      </div>
+      <div class="footer-bottom"><div class="footer-bottom-text">© 2025 Lumora Estates. All rights reserved.</div><div class="footer-bottom-text">Privacy · Terms · Cookies</div></div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/919876543210" class="whatsapp-btn" target="_blank">💬</a>
+  <div class="float-book-btn" onclick="window.location.href='contact.html'"><span>📅</span> Book a Visit</div>
+  <div class="chatbot-float"><div class="chatbot-window" id="chatbotWindow"><div class="chatbot-header"><div class="chatbot-avatar">🤖</div><div><div style="font-weight:700;font-size:0.9rem;color:#fff;">Lumora AI</div></div><div style="margin-left:auto;cursor:pointer;color:#fff;" onclick="document.getElementById('chatbotWindow').classList.remove('open')">✕</div></div><div class="chatbot-messages" id="chatMessages"><div class="chat-msg bot">👋 Want to connect with one of our agents? I can help!</div></div><div class="chatbot-input-row"><input type="text" id="chatInput" placeholder="Ask me anything..." /><button id="chatSend" class="btn btn-primary btn-sm">→</button></div></div><div class="chatbot-btn" id="chatbotBtn">🤖</div></div>
+
+  <script src="script.js"></script>
+  <script>
+    const agentSearch = document.getElementById('agentSearch');
+    const agentFilter = document.getElementById('agentFilter');
+    function filterAgents() {
+      const q = agentSearch?.value.toLowerCase() || '';
+      const f = agentFilter?.value || 'all';
+      document.querySelectorAll('.agent-card').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        const spec = card.dataset.spec || '';
+        const matchQ = text.includes(q);
+        const matchF = f === 'all' || spec === f;
+        card.style.display = (matchQ && matchF) ? '' : 'none';
+      });
+    }
+    agentSearch?.addEventListener('input', filterAgents);
+    agentFilter?.addEventListener('change', filterAgents);
+  </script>
+</body>
+</html>

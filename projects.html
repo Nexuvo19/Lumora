@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects — Lumora Estates</title>
+  <meta name="description" content="Discover Lumora Estates' upcoming and completed landmark projects redefining luxury living across the globe." />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .masterplan {
+      position: relative;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      margin: 60px 0;
+    }
+    .masterplan img { width: 100%; height: 500px; object-fit: cover; }
+    .masterplan-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(3,8,15,0.92) 35%, rgba(3,8,15,0.3) 100%);
+      display: flex; align-items: center;
+      padding: 60px;
+    }
+    .masterplan-content { max-width: 480px; }
+    .hotspot {
+      position: absolute;
+      width: 20px; height: 20px;
+      background: var(--accent-blue);
+      border-radius: 50%;
+      cursor: pointer;
+      animation: pulse-dot 2s ease-in-out infinite;
+      border: 3px solid rgba(255,255,255,0.4);
+    }
+    .hotspot::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: 28px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-glass-strong);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      font-size: 0.72rem;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      pointer-events: none;
+    }
+    .hotspot:hover::after { opacity: 1; }
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(14,165,255,0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(14,165,255,0); }
+    }
+    @media(max-width:768px) { .masterplan-overlay { padding: 24px; } .masterplan img { height: 360px; } }
+  </style>
+</head>
+<body>
+  <div id="loader"><div class="loader-inner"><div class="loader-logo">LUMORA</div><div class="loader-bar"></div></div></div>
+  <canvas id="particles-canvas"></canvas>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">LUMORA<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li><li><a href="properties.html">Properties</a></li><li><a href="projects.html" class="active">Projects</a></li><li><a href="about.html">About</a></li><li><a href="agents.html">Agents</a></li><li><a href="3d-tour.html">3D Tour</a></li><li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-theme" id="themeBtn">☀️</button>
+        <a href="contact.html" class="btn-nav-cta">Book Visit</a>
+        <div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>
+      </div>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a><a href="properties.html">Properties</a><a href="projects.html">Projects</a><a href="about.html">About</a><a href="agents.html">Agents</a><a href="3d-tour.html">3D Tour</a><a href="contact.html">Contact</a>
+  </div>
+
+  <!-- Page Hero -->
+  <div class="page-hero">
+    <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=80');"></div>
+    <div class="page-hero-overlay"></div>
+    <div class="page-hero-content">
+      <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Projects</span></div>
+      <h1 class="page-hero-title">Landmark <span class="text-gradient">Projects</span></h1>
+      <p style="color:var(--text-secondary);max-width:520px;margin-top:12px;line-height:1.7;">From iconic skylines to serene estates — our projects redefine what luxury living means for the next generation.</p>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <section style="padding:60px 0 20px;">
+    <div class="container">
+      <div class="filter-chips" style="justify-content:center;">
+        <div class="filter-chip active" data-filter="all">All Projects</div>
+        <div class="filter-chip" data-filter="ongoing">Ongoing</div>
+        <div class="filter-chip" data-filter="upcoming">Upcoming</div>
+        <div class="filter-chip" data-filter="completed">Completed</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects Grid -->
+  <section style="padding:40px 0;">
+    <div class="container">
+      <div class="projects-grid">
+        <!-- Project 1 -->
+        <div class="project-card animate-on-scroll" data-type="ongoing">
+          <div class="project-image">
+            <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80" alt="Lumora Skyrise" loading="lazy" />
+            <div class="project-status-badge status-ongoing">Ongoing</div>
+            <div class="project-progress">
+              <div class="progress-label"><span>Construction Progress</span><span>72%</span></div>
+              <div class="progress-bar-wrap"><div class="progress-bar-fill" data-width="72" style="width:0%"></div></div>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-name">Lumora Skyrise Tower</div>
+            <div class="project-loc">📍 Bandra Kurla Complex, Mumbai</div>
+            <div class="project-highlights">
+              <span class="highlight-tag">60 Floors</span>
+              <span class="highlight-tag">240 Apartments</span>
+              <span class="highlight-tag">Rooftop Infinity Pool</span>
+              <span class="highlight-tag">Smart Home Tech</span>
+            </div>
+            <div class="project-footer">
+              <div>
+                <div class="project-price text-gradient">Starting ₹4.2 Cr</div>
+                <div class="project-units">120 Units Available</div>
+              </div>
+              <a href="contact.html" class="btn btn-primary btn-sm">Enquire Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project-card animate-on-scroll" data-type="upcoming">
+          <div class="project-image">
+            <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716?w=800&q=80" alt="Lumora Green Valley" loading="lazy" />
+            <div class="project-status-badge status-upcoming">Upcoming</div>
+            <div class="project-progress">
+              <div class="progress-label"><span>Pre-Launch Phase</span><span>15%</span></div>
+              <div class="progress-bar-wrap"><div class="progress-bar-fill" data-width="15" style="width:0%"></div></div>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-name">Lumora Green Valley</div>
+            <div class="project-loc">📍 Lonavala, Pune</div>
+            <div class="project-highlights">
+              <span class="highlight-tag">80 Villas</span>
+              <span class="highlight-tag">Private Plots</span>
+              <span class="highlight-tag">Club House</span>
+              <span class="highlight-tag">Organic Farms</span>
+            </div>
+            <div class="project-footer">
+              <div>
+                <div class="project-price text-gradient">Starting ₹8.5 Cr</div>
+                <div class="project-units">Pre-Launch Offer</div>
+              </div>
+              <a href="contact.html" class="btn btn-primary btn-sm">Register Interest</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project-card animate-on-scroll" data-type="completed">
+          <div class="project-image">
+            <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80" alt="Lumora Palm Residences" loading="lazy" />
+            <div class="project-status-badge status-completed">Completed</div>
+            <div class="project-progress">
+              <div class="progress-label"><span>Handover Complete</span><span>100%</span></div>
+              <div class="progress-bar-wrap"><div class="progress-bar-fill" data-width="100" style="width:0%"></div></div>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-name">Lumora Palm Residences</div>
+            <div class="project-loc">📍 Palm Jumeirah, Dubai</div>
+            <div class="project-highlights">
+              <span class="highlight-tag">42 Villas</span>
+              <span class="highlight-tag">Private Pools</span>
+              <span class="highlight-tag">Beachfront Access</span>
+              <span class="highlight-tag">Fully Sold Out</span>
+            </div>
+            <div class="project-footer">
+              <div>
+                <div class="project-price text-gradient">From $3.8M</div>
+                <div class="project-units" style="color:var(--accent-teal);">✓ Fully Delivered</div>
+              </div>
+              <a href="contact.html" class="btn btn-outline btn-sm">View Gallery</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="project-card animate-on-scroll" data-type="ongoing">
+          <div class="project-image">
+            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80" alt="Lumora Marina" loading="lazy" />
+            <div class="project-status-badge status-ongoing">Ongoing</div>
+            <div class="project-progress">
+              <div class="progress-label"><span>Construction Progress</span><span>45%</span></div>
+              <div class="progress-bar-wrap"><div class="progress-bar-fill" data-width="45" style="width:0%"></div></div>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-name">Lumora Marina Heights</div>
+            <div class="project-loc">📍 Marine Drive, Mumbai</div>
+            <div class="project-highlights">
+              <span class="highlight-tag">35 Stories</span>
+              <span class="highlight-tag">Sea Views</span>
+              <span class="highlight-tag">Concierge</span>
+              <span class="highlight-tag">Sky Lounge</span>
+            </div>
+            <div class="project-footer">
+              <div>
+                <div class="project-price text-gradient">Starting ₹12 Cr</div>
+                <div class="project-units">60 Units Remaining</div>
+              </div>
+              <a href="contact.html" class="btn btn-primary btn-sm">Enquire Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Masterplan Section -->
+  <section style="padding:0 0 80px;">
+    <div class="container">
+      <div class="section-header centered animate-on-scroll">
+        <div class="section-label">Flagship Development</div>
+        <h2 class="section-title">Lumora <span class="highlight">Grand</span> Masterplan</h2>
+        <p class="section-desc">An integrated 200-acre township redefining urban luxury living in India's most coveted corridor.</p>
+      </div>
+      <div class="masterplan animate-on-scroll">
+        <img src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1400&q=85" alt="Masterplan" />
+        <!-- Hotspots -->
+        <div class="hotspot" style="top:35%;left:25%;" data-label="Zone A: Villas"></div>
+        <div class="hotspot" style="top:50%;left:55%;" data-label="Zone B: Towers"></div>
+        <div class="hotspot" style="top:65%;left:38%;" data-label="Zone C: Commercial"></div>
+        <div class="hotspot" style="top:42%;left:72%;" data-label="Zone D: Amenities"></div>
+        <div class="masterplan-overlay">
+          <div class="masterplan-content">
+            <div class="section-label">Integrated Township</div>
+            <h3 style="font-family:var(--font-display);font-size:2rem;font-weight:800;margin-bottom:16px;">Lumora Grand City</h3>
+            <p style="color:var(--text-secondary);line-height:1.7;margin-bottom:24px;">A self-sustained luxury township spanning 200 acres with premium villas, high-rise towers, commercial hubs, schools, hospitals, and world-class amenities — all thoughtfully curated.</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;">
+              <div><div style="font-size:1.5rem;font-weight:800;" class="text-gradient">200</div><div style="font-size:0.78rem;color:var(--text-muted);">Acres</div></div>
+              <div><div style="font-size:1.5rem;font-weight:800;" class="text-gradient">1,200</div><div style="font-size:0.78rem;color:var(--text-muted);">Units</div></div>
+              <div><div style="font-size:1.5rem;font-weight:800;" class="text-gradient">4</div><div style="font-size:0.78rem;color:var(--text-muted);">Zone Types</div></div>
+              <div><div style="font-size:1.5rem;font-weight:800;" class="text-gradient">2027</div><div style="font-size:0.78rem;color:var(--text-muted);">Est. Delivery</div></div>
+            </div>
+            <a href="contact.html" class="btn btn-primary">Download Brochure</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Amenities Showcase -->
+  <section style="padding:0 0 100px;background:var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header centered animate-on-scroll">
+        <div class="section-label">Project Amenities</div>
+        <h2 class="section-title">Living at Its <span class="highlight">Finest</span></h2>
+      </div>
+      <div class="amenities-grid">
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">🏙️</span><div class="amenity-title">Skyline Views</div><div class="amenity-desc">Panoramic views of the city skyline from every floor</div></div>
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">🎾</span><div class="amenity-title">Sports Courts</div><div class="amenity-desc">Tennis, squash, basketball courts and sports arenas</div></div>
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">🎭</span><div class="amenity-title">Arts Centre</div><div class="amenity-desc">Private amphitheater and cultural event spaces</div></div>
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">🏫</span><div class="amenity-title">Elite Schools</div><div class="amenity-desc">International schools within the township campus</div></div>
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">🏥</span><div class="amenity-title">Healthcare Hub</div><div class="amenity-desc">World-class medical center with 24/7 emergency care</div></div>
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">🛍️</span><div class="amenity-title">Luxury Mall</div><div class="amenity-desc">High-end shopping and fine dining promenade</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand"><span class="nav-logo">LUMORA<span>.</span></span><p>India's most trusted luxury real estate brand crafting extraordinary living experiences.</p><div class="footer-socials"><div class="footer-social-btn">𝕏</div><div class="footer-social-btn">in</div><div class="footer-social-btn">📷</div></div></div>
+        <div><div class="footer-heading">Navigation</div><ul class="footer-links"><li><a href="index.html">Home</a></li><li><a href="properties.html">Properties</a></li><li><a href="projects.html">Projects</a></li><li><a href="about.html">About</a></li></ul></div>
+        <div><div class="footer-heading">Projects</div><ul class="footer-links"><li><a href="projects.html">Skyrise Tower</a></li><li><a href="projects.html">Green Valley</a></li><li><a href="projects.html">Marina Heights</a></li><li><a href="projects.html">Grand City</a></li></ul></div>
+        <div><div class="footer-heading">Contact</div><div class="footer-contact-item">📍 Lumora Tower, BKC, Mumbai</div><div class="footer-contact-item">📞 +91 98765 43210</div><div class="footer-contact-item">✉️ hello@lumoraestates.com</div></div>
+      </div>
+      <div class="footer-bottom"><div class="footer-bottom-text">© 2025 Lumora Estates. All rights reserved.</div><div class="footer-bottom-text">Privacy · Terms · Cookies</div></div>
+    </div>
+  </footer>
+
+  <a href="https://wa.me/919876543210" class="whatsapp-btn" target="_blank">💬</a>
+  <div class="float-book-btn" onclick="window.location.href='contact.html'"><span>📅</span> Book a Visit</div>
+  <div class="chatbot-float"><div class="chatbot-window" id="chatbotWindow"><div class="chatbot-header"><div class="chatbot-avatar">🤖</div><div><div style="font-weight:700;font-size:0.9rem;color:#fff;">Lumora AI</div></div><div style="margin-left:auto;cursor:pointer;color:#fff;" onclick="document.getElementById('chatbotWindow').classList.remove('open')">✕</div></div><div class="chatbot-messages" id="chatMessages"><div class="chat-msg bot">👋 Interested in our projects? I can provide more details!</div></div><div class="chatbot-input-row"><input type="text" id="chatInput" placeholder="Ask me anything..." /><button id="chatSend" class="btn btn-primary btn-sm">→</button></div></div><div class="chatbot-btn" id="chatbotBtn">🤖</div></div>
+
+  <script src="script.js"></script>
+  <script>
+    // Projects filter
+    const chips = document.querySelectorAll('.filter-chip');
+    const cards = document.querySelectorAll('.project-card');
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        const f = chip.dataset.filter;
+        cards.forEach(card => {
+          card.style.display = (f === 'all' || card.dataset.type === f) ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

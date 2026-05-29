@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lumora Estates — Luxury Living Beyond Imagination</title>
+  <meta name="description" content="Discover ultra-premium luxury real estate with Lumora Estates. Explore villas, penthouses, and exclusive properties crafted for the extraordinary." />
+  <meta name="keywords" content="luxury real estate, premium properties, villas, penthouses, luxury homes" />
+  <meta property="og:title" content="Lumora Estates — Luxury Living Beyond Imagination" />
+  <meta property="og:description" content="Experience the pinnacle of luxury real estate." />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      z-index: 3;
+      animation: float 2.5s ease-in-out infinite;
+    }
+    .scroll-wheel {
+      width: 24px; height: 40px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      display: flex; justify-content: center;
+      padding-top: 6px;
+    }
+    .scroll-wheel::before {
+      content: '';
+      width: 4px; height: 8px;
+      background: var(--accent-blue);
+      border-radius: 2px;
+      animation: scrollDown 2s ease-in-out infinite;
+    }
+    @keyframes scrollDown {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(12px); opacity: 0; }
+    }
+    .about-ceo {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .ceo-photo {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      border: 1px solid var(--border-glass);
+      box-shadow: var(--shadow-card);
+    }
+    .ceo-photo img { width: 100%; height: 340px; object-fit: cover; object-position: top; }
+    .ceo-quote {
+      font-size: 1.3rem;
+      font-style: italic;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .ceo-quote::before { content: '"'; font-size: 3rem; line-height: 0; vertical-align: -0.6em; color: var(--accent-blue); }
+    .ceo-sig { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; }
+    .ceo-role { font-size: 0.8rem; color: var(--text-muted); }
+    @media(max-width:768px) { .about-ceo { grid-template-columns: 1fr; } .ceo-photo { max-width: 260px; margin: 0 auto; } }
+  </style>
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-logo">LUMORA</div>
+      <div class="loader-bar"></div>
+    </div>
+  </div>
+
+  <!-- Particles -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">LUMORA<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="properties.html">Properties</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="agents.html">Agents</a></li>
+        <li><a href="3d-tour.html">3D Tour</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="btn-theme" id="themeBtn" title="Toggle Theme">☀️</button>
+        <a href="contact.html" class="btn-nav-cta">Book Visit</a>
+        <div class="nav-hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="properties.html">Properties</a>
+    <a href="projects.html">Projects</a>
+    <a href="about.html">About</a>
+    <a href="agents.html">Agents</a>
+    <a href="3d-tour.html">3D Tour</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-bg-image" data-parallax="0.015"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-grid">
+        <!-- Left -->
+        <div class="hero-text">
+          <div class="hero-badge">✦ India's #1 Luxury Real Estate</div>
+          <h1 class="hero-title">
+            <span class="line">Luxury Living</span>
+            <span class="line gradient-text">Beyond</span>
+            <span class="line gold-text">Imagination</span>
+          </h1>
+          <p class="hero-tagline">Experience real estate redefined — where architectural brilliance meets curated luxury. Discover homes that transcend the ordinary.</p>
+          <div class="hero-actions">
+            <a href="properties.html" class="btn btn-primary btn-lg">
+              <span>🏛️</span> Explore Properties
+            </a>
+            <a href="contact.html" class="btn btn-secondary btn-lg">
+              <span>📅</span> Book Site Visit
+            </a>
+            <a href="3d-tour.html" class="btn btn-gold btn-lg">
+              <span>🔭</span> 3D Virtual Tour
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat-item">
+              <span class="hero-stat-number" data-count data-target="850" data-suffix="+">850+</span>
+              <span class="hero-stat-label">Premium Properties</span>
+            </div>
+            <div class="hero-stat-item">
+              <span class="hero-stat-number" data-count data-target="12000" data-suffix="+">12,000+</span>
+              <span class="hero-stat-label">Happy Families</span>
+            </div>
+            <div class="hero-stat-item">
+              <span class="hero-stat-number" data-count data-target="18" data-suffix=" Yrs">18 Yrs</span>
+              <span class="hero-stat-label">Excellence</span>
+            </div>
+          </div>
+        </div>
+        <!-- Right Visual -->
+        <div class="hero-visual">
+          <div class="hero-card-stack">
+            <div class="hero-main-card">
+              <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=700&q=85" alt="Luxury Villa" loading="eager" />
+              <div class="hero-card-info">
+                <div class="hero-card-name">Azure Sky Villa</div>
+                <div class="hero-card-loc">📍 Palm Jumeirah, Dubai</div>
+                <div class="hero-card-price">$4,800,000</div>
+              </div>
+            </div>
+            <div class="hero-float-card card-1" data-parallax="0.03">
+              <div class="float-card-icon">🏊</div>
+              <div class="float-card-label">Private Pool</div>
+              <div class="float-card-value">Infinity Edge</div>
+            </div>
+            <div class="hero-float-card card-2" data-parallax="0.025">
+              <div class="float-card-icon">📐</div>
+              <div class="float-card-label">Area</div>
+              <div class="float-card-value">8,400 sq ft</div>
+            </div>
+            <div class="hero-float-card card-3" data-parallax="0.02">
+              <div class="float-card-icon">⭐</div>
+              <div class="float-card-label">Rating</div>
+              <div class="float-card-value">5 Star Rated</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <div class="scroll-wheel"></div>
+    </div>
+  </section>
+
+  <!-- ============ STATS ============ -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item animate-on-scroll">
+          <div class="stat-number" data-count data-target="850" data-suffix="+">850+</div>
+          <div class="stat-label">Properties Sold</div>
+        </div>
+        <div class="stat-item animate-on-scroll">
+          <div class="stat-number" data-count data-target="12000" data-suffix="+">12K+</div>
+          <div class="stat-label">Happy Clients</div>
+        </div>
+        <div class="stat-item animate-on-scroll">
+          <div class="stat-number" data-count data-target="48" data-suffix="+">48+</div>
+          <div class="stat-label">Prime Locations</div>
+        </div>
+        <div class="stat-item animate-on-scroll">
+          <div class="stat-number" data-count data-target="18" data-suffix=" Yrs">18 Yrs</div>
+          <div class="stat-label">Of Excellence</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURED PROPERTIES ============ -->
+  <section id="featured">
+    <div class="container">
+      <div class="section-header animate-on-scroll">
+        <div class="section-label">Featured Listings</div>
+        <h2 class="section-title">Handpicked <span class="highlight">Extraordinary</span> Properties</h2>
+        <p class="section-desc">Curated selections from our most exclusive portfolio — each property a masterpiece of architecture and design.</p>
+      </div>
+      <div class="featured-grid animate-on-scroll">
+        <div class="featured-large">
+          <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=85" alt="Sky Penthouse" />
+          <div class="featured-overlay">
+            <span class="tag tag-gold" style="margin-bottom:10px;">Featured</span>
+            <h3 style="font-size:1.5rem;font-weight:800;margin-bottom:4px;">Horizon Sky Penthouse</h3>
+            <p style="font-size:0.85rem;color:rgba(255,255,255,0.7);margin-bottom:12px;">📍 Marina Bay, Singapore</p>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-family:var(--font-display);font-size:1.6rem;font-weight:900;background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">$12,500,000</span>
+              <a href="properties.html" class="btn btn-primary btn-sm">View Details</a>
+            </div>
+          </div>
+        </div>
+        <div class="featured-small">
+          <div class="featured-thumb">
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=85" alt="Infinity Villa" />
+            <div class="featured-thumb-overlay">
+              <span class="tag tag-blue" style="margin-bottom:8px;">New Launch</span>
+              <h4 style="font-size:1rem;font-weight:700;margin-bottom:4px;">Infinity Crest Villa</h4>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span style="font-family:var(--font-display);font-weight:800;background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">$3,200,000</span>
+                <a href="properties.html" class="btn btn-sm btn-secondary">View</a>
+              </div>
+            </div>
+          </div>
+          <div class="featured-thumb">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=85" alt="Smart Apartment" />
+            <div class="featured-thumb-overlay">
+              <span class="tag tag-teal" style="margin-bottom:8px;">Premium</span>
+              <h4 style="font-size:1rem;font-weight:700;margin-bottom:4px;">Crystal Heights Apt</h4>
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span style="font-family:var(--font-display);font-weight:800;background:var(--grad-gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">$1,800,000</span>
+                <a href="properties.html" class="btn btn-sm btn-secondary">View</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:48px;">
+        <a href="properties.html" class="btn btn-outline">View All Properties →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUICK SEARCH ============ -->
+  <section style="padding:0 0 80px;">
+    <div class="container">
+      <div class="search-section animate-on-scroll">
+        <h3 style="margin-bottom:24px;font-family:var(--font-display);font-weight:700;">🔍 Find Your Dream Property</h3>
+        <div class="search-row">
+          <div class="search-field">
+            <label>Location</label>
+            <input type="text" placeholder="City, neighborhood..." />
+          </div>
+          <div class="search-field">
+            <label>Property Type</label>
+            <select>
+              <option>All Types</option>
+              <option>Villa</option>
+              <option>Penthouse</option>
+              <option>Apartment</option>
+              <option>Townhouse</option>
+              <option>Commercial</option>
+            </select>
+          </div>
+          <div class="search-field">
+            <label>Budget Range</label>
+            <select>
+              <option>Any Budget</option>
+              <option>Under $1M</option>
+              <option>$1M – $5M</option>
+              <option>$5M – $15M</option>
+              <option>$15M+</option>
+            </select>
+          </div>
+          <a href="properties.html" class="btn btn-primary">Search</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROPERTY SHOWCASE ============ -->
+  <section style="padding:0 0 100px;">
+    <div class="container">
+      <div class="section-header centered animate-on-scroll">
+        <div class="section-label">Our Portfolio</div>
+        <h2 class="section-title">Explore <span class="highlight">Premium</span> Listings</h2>
+      </div>
+      <div class="filter-chips" style="justify-content:center;margin-bottom:40px;">
+        <div class="filter-chip active" data-filter="all">All</div>
+        <div class="filter-chip" data-filter="villa">Villas</div>
+        <div class="filter-chip" data-filter="penthouse">Penthouses</div>
+        <div class="filter-chip" data-filter="apartment">Apartments</div>
+        <div class="filter-chip" data-filter="townhouse">Townhouses</div>
+      </div>
+      <div class="properties-grid">
+        <!-- Card 1 -->
+        <div class="property-card animate-on-scroll" data-type="villa" data-price="4800000">
+          <div class="property-card-image">
+            <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=700&q=80" alt="Azure Sky Villa" loading="lazy" />
+            <span class="property-badge badge-featured">Featured</span>
+            <button class="wishlist-btn">🤍</button>
+          </div>
+          <div class="property-card-body">
+            <div class="property-type">Villa</div>
+            <div class="property-name">Azure Sky Villa</div>
+            <div class="property-location">📍 Palm Jumeirah, Dubai</div>
+            <div class="property-specs">
+              <div class="spec-item"><span class="spec-icon">🛏️</span> 6 Beds</div>
+              <div class="spec-item"><span class="spec-icon">🚿</span> 7 Baths</div>
+              <div class="spec-item"><span class="spec-icon">📐</span> 8,400 sqft</div>
+            </div>
+            <div class="property-card-footer">
+              <div class="property-price">$4,800,000</div>
+              <a href="properties.html" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="property-card animate-on-scroll" data-type="penthouse" data-price="12500000">
+          <div class="property-card-image">
+            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=700&q=80" alt="Horizon Sky Penthouse" loading="lazy" />
+            <span class="property-badge badge-new">New</span>
+            <button class="wishlist-btn">🤍</button>
+          </div>
+          <div class="property-card-body">
+            <div class="property-type">Penthouse</div>
+            <div class="property-name">Horizon Sky Penthouse</div>
+            <div class="property-location">📍 Marina Bay, Singapore</div>
+            <div class="property-specs">
+              <div class="spec-item"><span class="spec-icon">🛏️</span> 5 Beds</div>
+              <div class="spec-item"><span class="spec-icon">🚿</span> 6 Baths</div>
+              <div class="spec-item"><span class="spec-icon">📐</span> 12,000 sqft</div>
+            </div>
+            <div class="property-card-footer">
+              <div class="property-price">$12,500,000</div>
+              <a href="properties.html" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="property-card animate-on-scroll" data-type="apartment" data-price="1800000">
+          <div class="property-card-image">
+            <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=700&q=80" alt="Crystal Heights" loading="lazy" />
+            <span class="property-badge badge-new">New</span>
+            <button class="wishlist-btn">🤍</button>
+          </div>
+          <div class="property-card-body">
+            <div class="property-type">Apartment</div>
+            <div class="property-name">Crystal Heights Apartment</div>
+            <div class="property-location">📍 Central Park, New York</div>
+            <div class="property-specs">
+              <div class="spec-item"><span class="spec-icon">🛏️</span> 4 Beds</div>
+              <div class="spec-item"><span class="spec-icon">🚿</span> 4 Baths</div>
+              <div class="spec-item"><span class="spec-icon">📐</span> 5,200 sqft</div>
+            </div>
+            <div class="property-card-footer">
+              <div class="property-price">$1,800,000</div>
+              <a href="properties.html" class="btn-view">View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AMENITIES ============ -->
+  <section style="padding:0 0 100px;background:var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header centered animate-on-scroll">
+        <div class="section-label">World-Class Amenities</div>
+        <h2 class="section-title">Every <span class="highlight">Luxury</span> Imaginable</h2>
+        <p class="section-desc">Our properties come with curated amenities that define elevated living.</p>
+      </div>
+      <div class="amenities-grid">
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">🏊</span><div class="amenity-title">Infinity Pools</div><div class="amenity-desc">Private & rooftop infinity pools with panoramic views</div></div>
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">💆</span><div class="amenity-title">Luxury Spa</div><div class="amenity-desc">World-class spa and wellness center with expert therapists</div></div>
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">🏋️</span><div class="amenity-title">Private Gym</div><div class="amenity-desc">Fully equipped private gym and yoga studio</div></div>
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">🚗</span><div class="amenity-title">Valet Parking</div><div class="amenity-desc">24/7 valet service with secure smart parking</div></div>
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">🔒</span><div class="amenity-title">Smart Security</div><div class="amenity-desc">AI-powered security with biometric access control</div></div>
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">🌿</span><div class="amenity-title">Zen Gardens</div><div class="amenity-desc">Landscaped rooftop gardens and private green spaces</div></div>
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">🍽️</span><div class="amenity-title">Private Chef</div><div class="amenity-desc">Michelin-star chef services available on request</div></div>
+        <div class="amenity-card animate-on-scroll"><span class="amenity-icon">✈️</span><div class="amenity-title">Helipad Access</div><div class="amenity-desc">Private helipad with direct airport concierge</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOUNDER MESSAGE ============ -->
+  <section style="padding:100px 0;">
+    <div class="container">
+      <div class="section-header centered animate-on-scroll" style="margin-bottom:60px;">
+        <div class="section-label">From Our Founder</div>
+        <h2 class="section-title">A <span class="highlight">Vision</span> of Excellence</h2>
+      </div>
+      <div class="about-ceo animate-on-scroll glass-card" style="padding:48px;">
+        <div class="ceo-photo">
+          <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=500&q=80" alt="CEO Lumora Estates" />
+        </div>
+        <div>
+          <p class="ceo-quote">At Lumora Estates, we don't just sell properties — we craft legacies. Every home we create is a canvas for extraordinary living, where architecture meets artistry and space becomes an experience. Our commitment is to exceed your every expectation.</p>
+          <div class="ceo-sig">Aryan Mehra</div>
+          <div class="ceo-role">Founder & Chairman, Lumora Estates Group</div>
+          <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
+            <div class="tag tag-blue">18+ Years Experience</div>
+            <div class="tag tag-gold">Forbes Real Estate Leader</div>
+            <div class="tag tag-teal">100+ Awards Won</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section style="padding:0 0 100px;background:var(--bg-secondary);">
+    <div class="container">
+      <div class="section-header centered animate-on-scroll">
+        <div class="section-label">Client Stories</div>
+        <h2 class="section-title">What Our <span class="highlight">Clients</span> Say</h2>
+        <p class="section-desc">Real experiences from families who found their dream homes with us.</p>
+      </div>
+      <div class="testimonial-slider">
+        <div class="testimonials-inner">
+          <div class="testimonial-card">
+            <div class="star-rating">★★★★★</div>
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">Lumora Estates delivered beyond our expectations. The penthouse they found us has become the jewel of our lives. Their attention to detail and personalized service is simply unmatched.</p>
+            <div class="testimonial-author">
+              <img class="author-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80" alt="Sarah" />
+              <div>
+                <div class="author-name">Sarah Mitchell</div>
+                <div class="author-role">CEO, Mitchell Capital Group</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="star-rating">★★★★★</div>
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">The 3D virtual tour was incredible — we bought our villa from overseas without even visiting first. The level of trust Lumora built made the entire process seamless and joyful.</p>
+            <div class="testimonial-author">
+              <img class="author-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" alt="James" />
+              <div>
+                <div class="author-name">James Whitfield</div>
+                <div class="author-role">Investment Banker, London</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="star-rating">★★★★★</div>
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">Buying our dream villa was an emotional journey and Lumora made it magical. Their team guided us with patience, expertise, and genuine care. We couldn't be happier.</p>
+            <div class="testimonial-author">
+              <img class="author-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80" alt="Priya" />
+              <div>
+                <div class="author-name">Priya Sharma</div>
+                <div class="author-role">Entrepreneur, Mumbai</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="star-rating">★★★★★</div>
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">The finest real estate experience I've ever had. Their portfolio is stunning, agents are world-class, and the properties truly live up to the luxury promise. Absolutely exceptional.</p>
+            <div class="testimonial-author">
+              <img class="author-avatar" src="https://images.unsplash.com/photo-1564564321837-a57b7070ac4f?w=200&q=80" alt="Michael" />
+              <div>
+                <div class="author-name">Michael Anderson</div>
+                <div class="author-role">Tech Founder, Silicon Valley</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slider-controls">
+        <button class="slider-btn" id="sliderPrev">←</button>
+        <div class="slider-dots">
+          <div class="slider-dot active"></div>
+          <div class="slider-dot"></div>
+          <div class="slider-dot"></div>
+          <div class="slider-dot"></div>
+        </div>
+        <button class="slider-btn" id="sliderNext">→</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AWARDS ============ -->
+  <section style="padding:100px 0;">
+    <div class="container">
+      <div class="section-header centered animate-on-scroll">
+        <div class="section-label">Recognition</div>
+        <h2 class="section-title">Global <span class="highlight-gold">Award</span> Winning</h2>
+      </div>
+      <div class="awards-grid">
+        <div class="award-card animate-on-scroll"><span class="award-icon">🏆</span><div class="award-title">Best Luxury Developer</div><div class="award-org">Forbes Real Estate Awards</div><div class="award-year">2024</div></div>
+        <div class="award-card animate-on-scroll"><span class="award-icon">🥇</span><div class="award-title">Excellence in Design</div><div class="award-org">Asia Pacific Property Awards</div><div class="award-year">2023</div></div>
+        <div class="award-card animate-on-scroll"><span class="award-icon">⭐</span><div class="award-title">5-Star Rated Agency</div><div class="award-org">International Real Estate Federation</div><div class="award-year">2024</div></div>
+        <div class="award-card animate-on-scroll"><span class="award-icon">🌍</span><div class="award-title">Global Brand of the Year</div><div class="award-org">Luxury Property Summit</div><div class="award-year">2023</div></div>
+        <div class="award-card animate-on-scroll"><span class="award-icon">💎</span><div class="award-title">Diamond Property Award</div><div class="award-org">South Asia Real Estate Council</div><div class="award-year">2024</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ NEWSLETTER ============ -->
+  <section style="padding:0 0 100px;">
+    <div class="container">
+      <div class="newsletter-section animate-on-scroll">
+        <div style="position:relative;z-index:1;">
+          <div style="font-size:2rem;margin-bottom:8px;">✉️</div>
+          <h2 style="font-family:var(--font-display);font-size:2rem;font-weight:800;color:#fff;margin-bottom:8px;">Stay Ahead of the Market</h2>
+          <p style="color:rgba(255,255,255,0.8);font-size:0.95rem;">Get exclusive listings, market insights, and investment opportunities delivered to your inbox.</p>
+          <form class="newsletter-form" id="newsletterForm">
+            <input type="email" placeholder="Enter your email address..." required />
+            <button type="submit">Subscribe Free</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="nav-logo">LUMORA<span>.</span></span>
+          <p>India's most trusted luxury real estate brand, crafting extraordinary living experiences for over 18 years. Where dreams find their address.</p>
+          <div class="footer-socials">
+            <div class="footer-social-btn">𝕏</div>
+            <div class="footer-social-btn">in</div>
+            <div class="footer-social-btn">📷</div>
+            <div class="footer-social-btn">▶</div>
+            <div class="footer-social-btn">📘</div>
+          </div>
+        </div>
+        <div>
+          <div class="footer-heading">Quick Links</div>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="properties.html">Properties</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="agents.html">Our Agents</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-heading">Property Types</div>
+          <ul class="footer-links">
+            <li><a href="properties.html">Luxury Villas</a></li>
+            <li><a href="properties.html">Sky Penthouses</a></li>
+            <li><a href="properties.html">Apartments</a></li>
+            <li><a href="properties.html">Townhouses</a></li>
+            <li><a href="properties.html">Commercial</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-heading">Contact Us</div>
+          <div class="footer-contact-item">📍 Lumora Tower, BKC, Mumbai 400051</div>
+          <div class="footer-contact-item">📞 +91 98765 43210</div>
+          <div class="footer-contact-item">✉️ hello@lumoraestates.com</div>
+          <div class="footer-contact-item">🕐 Mon–Sat: 9AM – 8PM</div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-bottom-text">© 2025 Lumora Estates. All rights reserved.</div>
+        <div class="footer-bottom-text">Privacy Policy · Terms of Service · Cookie Policy</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Buttons -->
+  <a href="https://wa.me/919876543210" class="whatsapp-btn" target="_blank" title="Chat on WhatsApp">💬</a>
+  <div class="float-book-btn" onclick="window.location.href='contact.html'">
+    <span>📅</span> Book a Visit
+  </div>
+
+  <!-- Chatbot -->
+  <div class="chatbot-float">
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="chatbot-header">
+        <div class="chatbot-avatar">🤖</div>
+        <div>
+          <div style="font-weight:700;font-size:0.9rem;color:#fff;">Lumora AI</div>
+          <div style="font-size:0.72rem;color:rgba(255,255,255,0.8);">Online · Real Estate Expert</div>
+        </div>
+        <div style="margin-left:auto;cursor:pointer;color:#fff;" onclick="document.getElementById('chatbotWindow').classList.remove('open')">✕</div>
+      </div>
+      <div class="chatbot-messages" id="chatMessages">
+        <div class="chat-msg bot">👋 Hello! I'm Lumora AI. How can I help you find your dream property today?</div>
+      </div>
+      <div class="chatbot-input-row">
+        <input type="text" id="chatInput" placeholder="Ask about properties..." />
+        <button id="chatSend" class="btn btn-primary btn-sm">→</button>
+      </div>
+    </div>
+    <div class="chatbot-btn" id="chatbotBtn" title="Chat with AI">🤖</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
